@@ -21,7 +21,7 @@ app.use(async (ctx) => {
     ctx.body = utils.convertImport(ret);
   }
 
-  // 地址转换后的文件（/@module）
+  // 匹配路径转换后的文件（/@module）
   else if (url.startsWith("/@module")) {
     ctx.type = "text/javascript";
 
