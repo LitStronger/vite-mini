@@ -5,7 +5,7 @@ const fs = require("fs");
 const utils = require("./utils/utils");
 
 app.use(async (ctx) => {
-  const {url, query} = ctx.request;
+  const { url, query } = ctx.request;
   // 入口
   if (url === "/") {
     ctx.type = "text/html";
@@ -37,6 +37,7 @@ app.use(async (ctx) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log("kvite start");
+const port = 3000;
+app.listen(port, () => {
+  console.log(`vite-mini start at: http://localhost:${port}`);
 });
