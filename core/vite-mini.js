@@ -2,7 +2,7 @@ const Koa = require("koa");
 const app = new Koa();
 const path = require("path");
 const fs = require("fs");
-const utils = require("./utils/utils");
+const utils = require("../utils/utils");
 
 app.use(async (ctx) => {
   const { url, query } = ctx.request;
@@ -14,7 +14,7 @@ app.use(async (ctx) => {
 
   // js文件
   else if (url.endsWith(".js")) {
-    const p = path.join(__dirname, url);
+    const p = path.join(__dirname, "..", url);
     ctx.type = "text/javascript";
 
     const ret = fs.readFileSync(p, "utf-8");

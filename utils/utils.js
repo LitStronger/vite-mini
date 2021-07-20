@@ -31,7 +31,6 @@ function fileCompile(url, query) {
   const ret = compilerSfc.parse(fs.readFileSync(p, "utf-8")); // SFC文件请求
   if (!query.type) {
     const scriptContent = ret.descriptor.script.content;
-    console.log(scriptContent);
     const script = scriptContent.replace(
       "export default ",
       "const __script = "

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node ./app.js"
+    "start": "node ./core/vite-mini.js"
   },
   "dependencies": {
     "@vue/compiler-dom": "^3.1.4",
