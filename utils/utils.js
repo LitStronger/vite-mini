@@ -31,20 +31,23 @@ function fileCompile(url, query) {
   const ret = compilerSfc.parse(fs.readFileSync(p, "utf-8")); // SFC文件请求
   if (!query.type) {
     const scriptContent = ret.descriptor.script.content;
+    console.log(ret);
     const script = scriptContent.replace(
       "export default ",
       "const __script = "
     ); // 返回App.vue解析结果
 
     return `${convertImport(script)} 
-            import { render as __render } from '${url}?type=template' 
-            __script.render = __render        
-            export default __script      `;
+    import { render as __render } from '${url}?type=template' 
+    __script.render = __render        
+    export default __script`;
   }
   // 模板内容
   else if (query.type === "template") {
     const template = ret.descriptor.template.content; // 编译为render
     const render = compilerDom.compile(template, { mode: "module" }).code;
+    console.log(render);
+
     return convertImport(render);
   }
 }

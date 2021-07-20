@@ -29,21 +29,35 @@
 
 ### vite原理
 
+利用浏览器原生 `ESM`，按需编译，只加载当前页面用到的文件
 
+1. **vue、ts、tsx等**
 
-1. 利用浏览器原生 `ESM`，按需编译，只加载当前页面用到的文件
-
-2. 浏览器无法直接使用`.vue`，`jsx`等，需服务端返回编译后的文件
+   浏览器无法直接使用`.vue`，`jsx`等，需服务端返回编译后的文件
 
    - `vue`文件使用`sfc模块`（`@vue/compiler-sfc`）编译
 
    - `ts`、`tsx`等文件使用`esbuild`解析（利用`go`语言处理高并发的优势），解析`ts`，`jsx`比`tsc`快20-30倍
 
      ![image-20210710235217994](C:\Users\lyq\AppData\Roaming\Typora\typora-user-images\image-20210710235217994.png)
-   
-3. **NPM 依赖解析和预构建**
+     
+     **过程**
+     
+     首次请求直接拿到的其实只有vue里的js部分。
+     
+     模板template和css需要转成js渲染函数，并需要浏览器再次发送请求才能得到。vue文件的三部分内容都拿到了就可以完成渲染了
+     
+     ![image-20210715090251415](C:\Users\lyq\AppData\Roaming\Typora\typora-user-images\image-20210715090251415.png)
+     
+     
+     
+     
 
-   对“裸”模块路径转换
+2. **NPM 依赖解析和预构建**
+
+   **依赖解析**
+
+   对“裸”模块路径转换zz
 
    > 裸模块指引入路径不明确，缺少'/'，'./' 或 '../'。比如
    >
@@ -63,9 +77,16 @@
 
    ![image-20210711123218442](C:\Users\lyq\AppData\Roaming\Typora\typora-user-images\image-20210711123218442.png)
 
-   可以看到浏览器得到的文件是服务端改写过的，引入模块`from 'vue'`被转换成了`from '/@modules/vue.js'`,
+   可以看到浏览器得到的文件是服务端改写过的，引入模块`from 'vue'`被转换成了`from '/@modules/vue.js'`。后续需要做的就是匹配`/@module`前缀，然后用`fs`模块从node_module下读取vue模块并返回给浏览器。
 
-4. 图片等静态资源则直接返回解析后的路径
+   **预构建**
+
+   - CommonJS / UMD 转换为 ESM 格式
+   - 减少重复请求
+
+3. **css文件** 将会被插入到 `<style>` 标签中
+
+4. **图片等静态资源**  直接返回解析后的路径
 
 5. 热更新
 
